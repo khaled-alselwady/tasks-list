@@ -1,11 +1,14 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Task, TaskStatus } from './task.model';
+import { LoggingService } from '../logging.service';
 
 @Injectable({ providedIn: 'root' })
 export class TasksService {
   private tasks = signal<Task[]>([]);
 
   allTasks = this.tasks.asReadonly();
+
+  private loggingService = inject(LoggingService);
 
   addTask(taskData: { title: string; description: string }) {
     const newTask: Task = {
@@ -16,6 +19,8 @@ export class TasksService {
 
     // this.tasks.set([...this.tasks(), newTask]);
     this.tasks.update((oldTasks) => [...oldTasks, newTask]);
+
+    this.loggingService.log('ADDED TASKS WITH TITLE: ' + taskData.title);
   }
 
   removeTask(id: string) {
@@ -28,6 +33,8 @@ export class TasksService {
         task.id === taskId ? { ...task, status: newStatus } : task
       )
     );
+
+    this.loggingService.log('CHANGE TASKS STATUS TO: ' + newStatus);
   }
 
   find(status: TaskStatus) {
