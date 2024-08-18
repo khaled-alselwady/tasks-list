@@ -1,4 +1,4 @@
-<form (ngSubmit)="onAddTask()" #form>
+<form (ngSubmit)="onAddTask(title.value, description.value)" #form>
   <p>
     <label for="title">Title</label>
     <input type="text" id="title" name="title" #title />

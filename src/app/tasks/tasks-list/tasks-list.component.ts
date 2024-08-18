@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 
 import { TaskItemComponent } from './task-item/task-item.component';
 import { Task } from '../task.model';
+import { TasksService } from '../tasks.service';
 
 @Component({
   selector: 'app-tasks-list',
@@ -12,7 +13,10 @@ import { Task } from '../task.model';
 })
 export class TasksListComponent {
   selectedFilter = signal<string>('all');
-  tasks: Task[] = [];
+
+  private tasksService = inject(TasksService);
+
+  tasks = this.tasksService.allTasks;
 
   onChangeTasksFilter(filter: string) {
     this.selectedFilter.set(filter);
